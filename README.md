@@ -1,7 +1,7 @@
 # pdf-elasticsearch
 
 ## Overview
-Search fulltexts from PDFs using Elasticsearch and Kibana.
+Search full texts from PDFs using Elasticsearch and Kibana.
 
 ## Usage
 ```sh
