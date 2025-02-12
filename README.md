@@ -10,7 +10,7 @@ mkdir pdfs
 mv my_pdf_file.pdf pdfs/
 ```
 
-``sh
+```sh
 docker compose up -d
 ```
 
