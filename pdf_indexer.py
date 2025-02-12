@@ -64,13 +64,55 @@ def create_index(es):
                 body={
                     "settings": {
                         "number_of_shards": 1,
-                        "number_of_replicas": 0  # Set to 0 for single-node setup
+                        "number_of_replicas": 0,  # Set to 0 for single-node setup
+                        "analysis": {
+                            "analyzer": {
+                                "pdf_analyzer": {
+                                    "type": "custom",
+                                    "tokenizer": "standard",
+                                    "char_filter": [
+                                        "html_strip",
+                                        "pdf_char_filter"
+                                    ],
+                                    "filter": [
+                                        "lowercase",
+                                        "asciifolding",
+                                        "stop",
+                                        "word_delimiter_graph",
+                                        "english_possessive_stemmer",
+                                        "porter_stem",
+                                        "unique"
+                                    ]
+                                }
+                            },
+                            "char_filter": {
+                                "pdf_char_filter": {
+                                    "type": "mapping",
+                                    "mappings": [
+                                        "\\u0027 => ",
+                                        "\\u2018 => ",
+                                        "\\u2019 => ",
+                                        "\\u201C => ",
+                                        "\\u201D => "
+                                    ]
+                                }
+                            },
+                            "filter": {
+                                "english_possessive_stemmer": {
+                                    "type": "stemmer",
+                                    "language": "possessive_english"
+                                }
+                            }
+                        }
                     },
                     "mappings": {
                         "properties": {
                             "filename": {"type": "keyword"},
                             "page_number": {"type": "integer"},
-                            "content": {"type": "text"}
+                            "content": {
+                                "type": "text",
+                                "analyzer": "pdf_analyzer"
+                            }
                         }
                     }
                 }
